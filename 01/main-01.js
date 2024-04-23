@@ -50,7 +50,7 @@ window.addEventListener("load", function (event) {
     }
 
     var render = function () {
-        display.drawMap(assets_manager.tile_set_image, game.world.tile_set.columns, game.world.map, game.world.columns, game.world.tile_set.tile_size);
+        display.drawMap(assets_manager.tile_set_image, game.world.tile_set.columns, game.world.graphical_map, game.world.columns, game.world.tile_set.tile_size);
 
         let frame = game.world.tile_set.frames[game.world.player.frame_value];
 
