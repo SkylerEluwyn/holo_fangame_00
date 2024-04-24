@@ -7,6 +7,49 @@ const Game = function () {
 
 Game.prototype = { constructor: Game };
 
+// Animator //
+Game.Animator = function (frame_set, delay, mode = "loop") {
+    this.count       = 0;
+    this.delay       = (delay >= 1) ? delay : 1;
+    this.frame_set   = frame_set;
+    this.frame_index = 0;
+    this.frame_value = frame_set[0];
+    this.mode        = mode;
+};
+
+Game.Animator.prototype = {
+    constructor: Game.Animator,
+
+    animate: function() {
+        switch (this.mode) {
+            case "loop" : this.loop(); break;
+            case "pause":              break;
+        }
+    },
+
+    changeFrameSet(frame_set, mode, delay = 10, frame_index = 0) {
+        if (this.frame_set === frame_set) { return; }
+
+        this.count       = 0;
+        this.delay       = delay;
+        this.frame_set   = frame_set;
+        this.frame_index = frame_index;
+        this.frame_value = frame_set[frame_index];
+        this.mode        = mode;
+    },
+
+    loop: function () {
+        this.count ++;
+
+        while(this.count > this.delay) {
+            this.count -= this.delay;
+            this.frame_index = (this.frame_index < this.frame_set.length - 1) ? this.frame_index + 1 : 0;
+            this.frame_value = this.frame_set[this.frame_index];
+        }
+    }
+};
+// Animator end //
+
 // Collider //
 Game.Collider = function() {
     this.collide = function(value, object, tile_x, tile_y, tile_size) {
@@ -82,6 +125,19 @@ Game.Collider.prototype = {
 };
 // Collider.end //
 
+// Frame //
+Game.Frame = function (x, y, width, height, offset_x, offset_y) {
+    this.x        = x;
+    this.y        = y;
+    this.width    = width;
+    this.height   = height;
+    this.offset_x = offset_x;
+    this.offset_y = offset_y;
+};
+
+Game.Frame.prototype = { constructor: Game.Frame };
+// Frame end //
+
 // Object //
 Game.Object = function (x, y, width, height) {
     this.x      = x;
@@ -92,6 +148,25 @@ Game.Object = function (x, y, width, height) {
 
 Game.Object.prototype = {
     constructor: Game.Object,
+
+    collideObject: function (object) {
+        if (this.getRight()  < object.getLeft()  ||
+            this.getBottom() < object.getTop()   ||
+            this.getLeft()   > object.getRight() ||
+            this.getTop      > object.getBottom()) return false;
+        
+            return true;
+    },
+
+    collideObjectCenter: function (object) {
+        let center_x = object.getCenterX();
+        let center_y = object.getCenterY();
+
+        if(center_x < this.getLeft() || center_x > this.getRight() ||
+           center_y < this.getTop()  || center_y > this.getBottom()) return false;
+        
+            return true;
+    },
 
     getBottom:    function ()  { return this.y + this.height;       },
     getCenterX:   function ()  { return this.x + this.width  * 0.5; },
@@ -106,7 +181,7 @@ Game.Object.prototype = {
     setRight:     function (x) { this.x = x - this.width;           },
     setTop:       function (y) { this.y = y;                        },
 };
-// Object.end //
+// Object end //
 
 // Moving Object //
 Game.MovingObject = function(width, height, x, y, velocity_max) {
@@ -137,60 +212,28 @@ Game.MovingObject.prototype = {
 
 Object.assign(Game.MovingObject.prototype, Game.Object.prototype);
 Game.MovingObject.prototype.constructor = Game.MovingObject;
-// Moving Object.end //
+// Moving Object end //
 
-// Animator //
-Game.Animator = function (frame_set, delay) {
-    this.count       = 0;
-    this.delay       = (delay >= 1) ? delay : 1;
-    this.frame_set   = frame_set;
-    this.frame_index = 0;
-    this.frame_value = frame_set[0];
-    this.mode        = "pause";
+// Heart Expansions //
+Game.AddHeart = function (exp_heart) {
+    Game.Object.call(this, exp_heart.x, exp_heart.y, 16, 16);
+    Game.Animator.call(this, Game.AddHeart.prototype.frame_sets["static-heart"], 0, "pause");
 };
 
-Game.Animator.prototype = {
-    constructor: Game.Animator,
-
-    animate: function() {
-        switch (this.mode) {
-            case "loop" : this.loop(); break;
-            case "pause":              break;
-        }
-    },
-
-    changeFrameSet(frame_set, mode, delay = 10, frame_index = 0) {
-        if (this.frame_set === frame_set) { return; }
-
-        this.count       = 0;
-        this.delay       = delay;
-        this.frame_set   = frame_set;
-        this.frame_index = frame_index;
-        this.frame_value = frame_set[frame_index];
-        this.mode        = mode;
-    },
-
-    loop: function () {
-        this.count ++;
-
-        while(this.count > this.delay) {
-            this.count -= this.delay;
-            this.frame_index = (this.frame_index < this.frame_set.length - 1) ? this.frame_index + 1 : 0;
-            this.frame_value = this.frame_set[this.frame_index];
-        }
-    }
+Game.AddHeart.prototype = {
+    frame_sets: { "static_heart": 10 },
 };
-// Animator.end//
-
+Object.assign(Game.AddHeart.prototype, Game.Animator.prototype);
+Object.assign(Game.AddHeart.prototype, Game.Object.prototype);
+Game.AddHeart.prototype.constructor = Game.AddHeart;
+// Heart Expansions end //
 
 // Player //
 Game.Player = function (x, y) {
     Game.Object.call(this, 100, 50, 16, 16);
-    Game.Animator.call(this,Game.Player.prototype.frame_sets["idle-left"], 10);
+    Game.Animator.call(this, Game.Player.prototype.frame_sets["idle-left"], 5);
     this.jumping     =        true;           // Player's Jumping State
     this.shooting    =       false;           // Player's Shooting State
-
-    this.bullets     = new Array();           // Player's Bullets
 
     this.direction_x =          -1;           // Player's X Direction
     this.direction_y =           0;           // Player's Y Direction
@@ -201,14 +244,14 @@ Game.Player = function (x, y) {
 Game.Player.prototype = {
     constructor: Game.Player,
     frame_sets: {
-        "idle-left"  : [0],
-        "move-left"  : [1, 2],
-        "jump-left"  : [3],
-        "fall-left"  : [4],
-        "idle-right" : [5],
-        "move-right" : [6, 7],
-        "jump-right" : [8],
-        "fall-right" : [9],
+        "idle-left"       : [0],
+        "move-left"       : [1, 2],
+        "jump-left"       : [3],
+        "fall-left"       : [4],
+        "idle-right"      : [5],
+        "move-right"      : [6, 7],
+        "jump-right"      : [8],
+        "fall-right"      : [9],
     },
 
     jump: function () {
@@ -219,42 +262,42 @@ Game.Player.prototype = {
     },
 
     shoot: function () {
-        if(!this.shooting) {
-            switch(this.direction_x + "," + this.direction_y) {
-                case "-1,-1":
-                    this.shooting = true;
-                    // this.bullets.push(new Game.Bullet(this.x, this.y));
-                    break;
-                case "-1,0":
-                    this.shooting = true;
-                    // this.bullets.push(new Game.Bullet(this.x, (this.y + this.height) / 2));
-                    break;
-                case "-1,1":
-                    this.shooting = true;
-                    // this.bullets.push(new Game.Bullet(this.x, this.y + this.height));
-                case "0,-1":
-                    this.shooting = true;
-                    // this.bullets.push(new Game.Bullet((this.x + this.width) / 2, this.y));
-                    break;
-                case "0,1":
-                    if (this.jumping) {
-                        this.shooting = true;
-                        // this.bullets.push(new Game.Bullet((this.x + this.width) / 2, this.y + this.height));
-                    }
-                    break;
-                case "1,-1":
-                    this.shooting = true;
-                        // this.bullets.push(new Game.Bullet(this.x + this.width, this.y));
-                case "1,0":
-                    this.shooting = true;
-                    // this.bullets.push(new Game.Bullet(this.x + this.width, (this.y + this.height) / 2));
-                    break;
-                case " 1,1":
-                    this.shooting = true;
-                    // this.bullets.push(new Game.Bullet(this.x + this.width, this.y + this.height));
-                    break;
-            };
-        };
+        // if(!this.shooting) {
+        //     switch(this.direction_x + "," + this.direction_y) {
+        //         case "-1,-1":
+        //             this.shooting = true;
+        //             // this.bullets.push(new Game.Bullet(this.x, this.y));
+        //             break;
+        //         case "-1,0":
+        //             this.shooting = true;
+        //             // this.bullets.push(new Game.Bullet(this.x, (this.y + this.height) / 2));
+        //             break;
+        //         case "-1,1":
+        //             this.shooting = true;
+        //             // this.bullets.push(new Game.Bullet(this.x, this.y + this.height));
+        //         case "0,-1":
+        //             this.shooting = true;
+        //             // this.bullets.push(new Game.Bullet((this.x + this.width) / 2, this.y));
+        //             break;
+        //         case "0,1":
+        //             if (this.jumping) {
+        //                 this.shooting = true;
+        //                 // this.bullets.push(new Game.Bullet((this.x + this.width) / 2, this.y + this.height));
+        //             }
+        //             break;
+        //         case "1,-1":
+        //             this.shooting = true;
+        //                 // this.bullets.push(new Game.Bullet(this.x + this.width, this.y));
+        //         case "1,0":
+        //             this.shooting = true;
+        //             // this.bullets.push(new Game.Bullet(this.x + this.width, (this.y + this.height) / 2));
+        //             break;
+        //         case " 1,1":
+        //             this.shooting = true;
+        //             // this.bullets.push(new Game.Bullet(this.x + this.width, this.y + this.height));
+        //             break;
+        //     };
+        // };
     },
 
     upAction: function () {
@@ -317,27 +360,27 @@ Game.Player.prototype.constructor = Game.Player;
 // Player.end //
 
 // Bullet //
-Game.Bullet = function (x, y) {
-    Game.Object.call(this, x, y, dx, dy);
+// Game.Bullet = function (x, y) {
+//     Game.Object.call(this, x, y, dx, dy);
 
-    this.lifespan    = 180;
+//     this.lifespan    = 180;
 
-    this.color = "#cfb737";
-    this.direction_x = dx;
-    this.direction_y = dy;
-    this.velocity_x  = 0;
-    this.velocity_y  = 0;
-}
+//     this.color = "#cfb737";
+//     this.direction_x = dx;
+//     this.direction_y = dy;
+//     this.velocity_x  = 0;
+//     this.velocity_y  = 0;
+// }
 
-Object.assign(Game.Bullet.prototype, Game.MovingObject.prototype);
-Game.Bullet.prototype = {
-    constructor: Game.Bullet,
+// Object.assign(Game.Bullet.prototype, Game.MovingObject.prototype);
+// Game.Bullet.prototype = {
+//     constructor: Game.Bullet,
 
-    updatePosition: function () {
-        this.x = this.velocity_x;
-        this.y = this.velocity_y;
-    },
-};
+//     updatePosition: function () {
+//         this.x = this.velocity_x;
+//         this.y = this.velocity_y;
+//     },
+// };
 // Bullet end //
 
 // TileSet //
@@ -355,44 +398,33 @@ Game.TileSet = function (columns, tile_size) {
                    new f( 16,  32,  16,  16,   0,   0), new f(  32,  32,  16,  16,   0,   0), // move-left
                    new f( 48,  32,  16,  16,   0,   0),                                       // jump-right
                    new f( 64,  32,  16,  16,   0,   0),                                       // fall-right
+                   new f( 80,   0,  16,  16,   0,   0),                                       // static-heart
     ];
 };
 
 Game.TileSet.prototype = { constructor: Game.TileSet };
 // Tile Set end //
 
-// Tile Set Frame //
-Game.Frame = function (x, y, width, height, offset_x, offset_y) {
-    this.x        = x;
-    this.y        = y;
-    this.width    = width;
-    this.height   = height;
-    this.offset_x = offset_x;
-    this.offset_y = offset_y;
-};
-
-Game.Frame.prototype = { constructor: Game.Frame };
-// Tile Set Frame end //
-
 // World //
 Game.World = function (friction = 0.9, gravity = 0.5) {
-    this.collider = new Game.Collider();
+    this.collider    = new Game.Collider();
     
-    this.friction = friction;
-    this.gravity  = gravity;
+    this.friction    = friction;
+    this.gravity     = gravity;
 
-    this.columns  = 16;
-    this.rows     = 9;
+    this.columns     = 16;
+    this.rows        = 9;
 
-    this.tile_set = new Game.TileSet(5, 16);
-    this.player   = new Game.Player(100, 20);
+    this.tile_set    = new Game.TileSet(5, 16);
+    this.player      = new Game.Player(100, 20);
 
-    this.bullets  = new Array();
+    this.zone_id     = "00";
 
-    this.zone_id  = "00";
+    this.exp_hearts  = [];
+    this.heart_count = 0;
 
-    this.height   = this.tile_set.tile_size * this.rows;
-    this.width    = this.tile_set.tile_size * this.columns;
+    this.height      = this.tile_set.tile_size * this.rows;
+    this.width       = this.tile_set.tile_size * this.columns;
 };
 
 Game.World.prototype = {
@@ -428,17 +460,37 @@ Game.World.prototype = {
     },
 
     setup: function (zone) {
+        this.exp_hearts    = new Array();
+
         this.graphical_map = zone.graphical_map;
         this.collision_map = zone.collision_map;
         this.columns       = zone.columns;
         this.rows          = zone.rows;
         this.zone_id       = zone.zone_id;
+
+        for(let index = exp_hearts.length - 1; index > -1; -- index) {
+            let exp_heart = zone.exp_hearts[index];
+            this.exp_hearts[index] = new Game.AddHeart(exp_heart);
+        }
     },
 
     update: function () {
         this.player.updatePosition(this.gravity, this.friction);
 
         this.collideObject(this.player);
+
+        //
+        for (let index = this.exp_hearts.length - 1; index > -1; -- index) {
+            let exp_heart = this.exp_hearts[index];
+
+            exp_heart.animate();
+
+            if(exp_heart.collideObject(this.player)) {
+                this.exp_hearts.splice(this.exp_hearts.indexOf(exp_heart), 1);
+                this.heart_count ++;
+            }
+        }
+        //
 
         this.player.updateAnimation();
     }

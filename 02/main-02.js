@@ -56,15 +56,32 @@ window.addEventListener("load", function (event) {
     var resize = function (event) {
         display.resize(document.documentElement.clientWidth - 32, document.documentElement.clientHeight - 32, game.world.height / game.world.width);
         display.render();
+
+        var rectangle = display.context.canvas.getBoundingClientRect();
+
+        p.style.left     = rectangle.left + "px";
+        p.style.top      = rectangle.top  + "px";
+        p.style.fontSize = game.world.tile_set.tile_size * rectangle.height / game.world.height + "px";
     }
 
     var render = function () {
+        var frame = undefined;
+
         display.drawMap(assets_manager.tile_set_image, game.world.tile_set.columns, game.world.graphical_map, game.world.columns, game.world.tile_set.tile_size);
+        
+        for (let index = game.world.exp_hearts.length - 1; index > -1; -- index) {
+            let exp_heart = game.world.exp_hearts[index];
 
-        let frame = game.world.tile_set.frames[game.world.player.frame_value];
+            frame = get.world.tile_set.frames[exp_heart.frame_value];
 
+            display.drawObject(assets_manager.tile_set_image, frame.x, frame.y, exp_heart.x + frame.offset_x, exp_heart.y + frame.offset_y, frame.width, frame.height);
+        };
+
+        frame = game.world.tile_set.frames[game.world.player.frame_value];
+        
         display.drawObject(assets_manager.tile_set_image, frame.x, frame.y, game.world.player.x + Math.floor(game.world.player.width * 0.5 - frame.width * 0.5) + frame.offset_x, game.world.player.y+ frame.offset_y, frame.width, frame.height);
         
+        p.innerHTML = "Hearts Collected: " + game.world.heart_count;
         display.render();
     }
 
@@ -103,6 +120,10 @@ window.addEventListener("load", function (event) {
     var game           = new Game();
     var engine         = new Engine(1000 / 60, render, update);
 
+    var p              = document.createElement("p");
+    p.setAttribute("style", "color:#c07000; font-size:2.0em; position:fixed;");
+    p.innerHTML = "Heart Expansions left: 0";
+    document.body.appendChild(p);
     ////////////////////
     //// INITIALIZE ////
     ////////////////////
