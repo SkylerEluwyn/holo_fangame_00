@@ -1,13 +1,6 @@
-* {
-    margin: 0;
-    overflow: hidden;
-    padding: 0;
-}
+* { box-sizing: border-box; margin: 0; padding: 0; }
 
-html {
-    width: 100%;
-    height: 100%;
-}
+html { width: 100%; height: 100%; }
 
 body {
     background-color: black;
@@ -19,4 +12,36 @@ body {
 canvas {
     justify-self: center;
     align-self: center;
+    image-rendering: pixelated;
+}
+
+#menu {
+    background-color: rgba(0, 0, 0, 0.5);
+    color: #fff;
+    cursor: pointer;
+    display: grid;
+    max-height: 100%;
+    overflow-y: auto;
+    padding: 8px;
+    position: fixed;
+    right: 0px;
+    top: 0px;
+    user-select: none;
+
+    -webkit-tap-highlight-color: transparent;
+}
+
+#menu p {
+    color: #fff;
+    font-size: 2.0em;
+}
+
+#menu-list {
+    display: none;
+}
+
+#menu-list a {
+    color: #fff;
+    font-size: 1.5em;
+    text-decoration: none;
 }
