@@ -221,7 +221,7 @@ Game.AddHeart = function (exp_heart) {
 };
 
 Game.AddHeart.prototype = {
-    frame_sets: { "static_heart": 10 },
+    frame_sets: { "static_heart": [10] },
 };
 Object.assign(Game.AddHeart.prototype, Game.Animator.prototype);
 Object.assign(Game.AddHeart.prototype, Game.Object.prototype);
