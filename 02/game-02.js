@@ -468,7 +468,7 @@ Game.World.prototype = {
         this.rows          = zone.rows;
         this.zone_id       = zone.zone_id;
 
-        for(let index = exp_hearts.length - 1; index > -1; -- index) {
+        for(let index = this.exp_hearts.length - 1; index > -1; -- index) {
             let exp_heart = zone.exp_hearts[index];
             this.exp_hearts[index] = new Game.AddHeart(exp_heart);
         }
