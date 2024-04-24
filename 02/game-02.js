@@ -217,11 +217,11 @@ Game.MovingObject.prototype.constructor = Game.MovingObject;
 // Heart Expansions //
 Game.ExpHeart = function (x, y) {
     Game.Object.call(this, x, y, 16, 16);
-    Game.Animator.call(this, Game.ExpHeart.prototype.frame_sets["static-heart"], 1, "pause");
+    Game.Animator.call(this, Game.ExpHeart.prototype.frame_sets["static-heart"], 0, "pause");
 };
 
 Game.ExpHeart.prototype = {
-    frame_sets: { "static_heart": [10], },
+    frame_sets: { "static-heart": [10], },
 };
 Object.assign(Game.ExpHeart.prototype, Game.Animator.prototype);
 Object.assign(Game.ExpHeart.prototype, Game.Object.prototype);
@@ -326,12 +326,12 @@ Game.Player.prototype = {
 
         } else if (this.dx < 0) {
         
-            if (this.vx < -0.1) this.changeFrameSet(this.frame_sets["move-left"], "loop", 10);
+            if (this.vx < -0.1) this.changeFrameSet(this.frame_sets["move-left"], "loop", 6);
             else this.changeFrameSet(this.frame_sets["idle-left"], "pause");
         
         } else if (this.dx > 0) {
 
-            if (this.vx > 0.1) this.changeFrameSet(this.frame_sets["move-right"], "loop", 12);
+            if (this.vx > 0.1) this.changeFrameSet(this.frame_sets["move-right"], "loop", 6);
             else this.changeFrameSet(this.frame_sets["idle-right"], "pause");
         
         }
