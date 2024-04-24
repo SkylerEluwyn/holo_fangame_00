@@ -10,10 +10,24 @@
 </head>
 
 <body>
+    <div id="menu">
+        <p>menu</p>
+        <div id="menu-list">
+            <a href="my_game.html?01">01</a>
+            <a href="my_game.html?02">02</a>
+        </div>
+    </div>
+    
     <canvas></canvas>
     <!-- <script src="js/main-00.js"></script> -->
     <script type="text/javascript">
-        let sources = ["controller-", "display-", "engine-", "game-", "main-"];
+        // let sources = ["controller-", "display-", "engine-", "game-", "main-"];
+
+        let parts = {
+            "01": ["01/controller-01.js", "01/display-01.js", "01/engine-01.js", "01/game-01.js", "01/main-01.js"],
+            "02": ["01/controller-01.js", "01/display-01.js", "01/engine-01.js", "02/game-01.js", "01/main-01.js"],
+        };
+
         let part = String(window.location).split("?")[1];
 
         switch (part) {
@@ -25,9 +39,18 @@
         for (let index = 0; index < sources.length; index++) {
             let script = document.createElement("script");
             script.setAttribute("type", "text/javascript");
-            script.setAttribute("src", String(part + "/" + sources[index] + part + ".js"));
+            script.setAttribute("src", parts[part][index]);
             document.head.appendChild(script);
         }
+
+        let menu = document.getElementById("menu");
+        let menu_list = document.getElementByID("menu-list");
+
+        menu.addEventListener("click", function (event) {
+            menu_list.style.display = (menu_list.style.display = "none") ? "grid" : "none";
+        });
+
+        menu._list.style.display = "none";
     </script>
 </body>
 
