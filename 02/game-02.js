@@ -189,7 +189,7 @@ Game.MovingObject = function(width, height, x, y, velocity_max) {
 
     this.jumping      = false;
     this.velocity_max = velocity_max;
-    this.vx    = 0;
+    this.vx           = 0;
     this.vy           = 0;
     this.x_old        = x;
     this.y_old        = y;
@@ -218,6 +218,8 @@ Game.MovingObject.prototype.constructor = Game.MovingObject;
 Game.ExpHeart = function (x, y) {
     Game.Object.call(this, x, y, 16, 16);
     Game.Animator.call(this, Game.ExpHeart.prototype.frame_sets["static-heart"], 0, "pause");
+
+    this.frame_index = 0;
 };
 
 Game.ExpHeart.prototype = {
@@ -301,12 +303,12 @@ Game.Player.prototype = {
     },
 
     moveLeft: function () {
-        this.dx  =    -2;
-        this.vx  -=  0.3;
+        this.vx  -=                      0.3;
+        this.dx   =  (this.vx < 1) ? -2 : -1;
     },
     moveRight: function (frame_set) {
-        this.dx  =     2;
-        this.vx  +=  0.3;
+        this.vx  +=                      0.3;
+        this.dx   =  (this.vx > 1) ?   2 : 1;
     },
 
     downAction: function() {
