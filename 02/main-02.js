@@ -89,7 +89,7 @@ window.addEventListener("load", function (event) {
         if (controller.shoot.active) {
             game.world.player.shoot();
             controller.shoot.active = false;
-            // alert('Player called the shot!');
+            console.log('Bang!');
         };
 
         game.update();
