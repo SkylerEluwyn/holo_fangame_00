@@ -87,8 +87,8 @@ window.addEventListener("load", function (event) {
 
     var update = function () {
         // Basic Movements
-        if (controller.left.active)  { game.world.player.moveLeft(); };  // Left Movement
-        if (controller.right.active) { game.world.player.moveRight(); }; // Right Movement
+        if (controller.left.active)  { game.world.player.moveLeft();  } else { game.world.player.dx  = -1; };  // Left Movement
+        if (controller.right.active) { game.world.player.moveRight(); } else { game.world.player.dx =   1; }; // Right Movement
         if (controller.up.active) {
             game.world.player.upAction();                                // Face up if the Up key is held down
         } else {

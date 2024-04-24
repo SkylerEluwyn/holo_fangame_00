@@ -221,7 +221,7 @@ Game.ExpHeart = function (x, y) {
 };
 
 Game.ExpHeart.prototype = {
-    frame_sets: { "static_heart": [10], },
+    frame_sets: { "static_heart": [10, 10], },
 };
 Object.assign(Game.ExpHeart.prototype, Game.Animator.prototype);
 Object.assign(Game.ExpHeart.prototype, Game.Object.prototype);
@@ -266,14 +266,31 @@ Game.Player.prototype = {
     shoot: function () {
         if (!this.shooting) {
             switch(dx + "," + dy) {
-                case "-2, 0": case "-1, 0":
+                case "-2,-1":             // Top-Left
+                    this.shooting = true;
+                    break;
+                case "-1,-1": case  "1,-1": // Top-Center
+                    this.shooting = true;
+                    break;
+                case  "2,-1":             // Top-Right
+                    this.shooting = true;
+                    break;
+                case "-2,0": case "-1,0": // Middle-Left
                     this.shooting = true;
                 break;
-                case "1,0"  : case "2,0":
+                case "1,0" : case  "2,0": // Middle-Right
                     this.shooting = true;
-                    // 
                     break;
-                case "-2,-1":
+                case "-2,1":              // Bottom-Left
+                    this.shooting = true;
+                    break;
+                case "-1,1": case  "1,1": // Bottom-Center
+                    if (this.jumping) {
+                        this.shooting = true;
+                    }
+                    break;
+                case  "2,1":              // Bottom-Right
+                    this.shooting = true;
                     break;
             };
         };
@@ -284,11 +301,11 @@ Game.Player.prototype = {
     },
 
     moveLeft: function () {
-        this.dx  =    -1;
+        this.dx  =    -2;
         this.vx  -=  0.3;
     },
     moveRight: function (frame_set) {
-        this.dx  =     1;
+        this.dx  =     2;
         this.vx  +=  0.3;
     },
 
