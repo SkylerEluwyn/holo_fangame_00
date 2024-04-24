@@ -303,7 +303,7 @@ Game.Player.prototype = {
         this.x_old = this.x;
         this.y_old = this.y;
 
-        if(!this.jumping) { this.velocity_x *= friction; }; // Friction is nullified when player is in midair
+        this.velocity_x *= friction;
         this.velocity_y += gravity;
 
         this.x    += this.velocity_x;

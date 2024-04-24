@@ -303,7 +303,7 @@ Game.Player.prototype = {
         this.x_old = this.x;
         this.y_old = this.y;
 
-        if(!this.jumping) { this.velocity_x *= friction; }; // Friction is nullified when player is in midair
+        this.velocity_x *= friction;
         this.velocity_y += gravity;
 
         this.x    += this.velocity_x;
@@ -359,7 +359,7 @@ Game.TileSet = function (columns, tile_size) {
 };
 
 Game.TileSet.prototype = { constructor: Game.TileSet };
-// Tile Set.end //
+// Tile Set end //
 
 // Tile Set Frame //
 Game.Frame = function (x, y, width, height, offset_x, offset_y) {
@@ -372,7 +372,7 @@ Game.Frame = function (x, y, width, height, offset_x, offset_y) {
 };
 
 Game.Frame.prototype = { constructor: Game.Frame };
-// Tile Set Frame.end //
+// Tile Set Frame end //
 
 // World //
 Game.World = function (friction = 0.9, gravity = 0.5) {
