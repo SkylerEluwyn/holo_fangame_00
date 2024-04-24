@@ -72,7 +72,7 @@ window.addEventListener("load", function (event) {
         for (let index = game.world.exp_hearts.length - 1; index > -1; -- index) {
             let exp_heart = game.world.exp_hearts[index];
 
-            frame = get.world.tile_set.frames[exp_heart.frame_value];
+            frame = game.world.tile_set.frames[exp_heart.frame_value];
 
             display.drawObject(assets_manager.tile_set_image, frame.x, frame.y, exp_heart.x + frame.offset_x, exp_heart.y + frame.offset_y, frame.width, frame.height);
         };
