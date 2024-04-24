@@ -18,11 +18,6 @@ const Display = function (canvas) {
         this.buffer.drawImage(image, source_x, source_y, width, height, Math.round(destination_x), Math.round(destination_y), width, height);
     };
 
-    this.drawRectangle = function (color, x, y, width, height) {
-        this.buffer.fillStyle = color;
-        this.buffer.fillRect(x, y, width, height);
-    }
-
     this.resize = function (width, height, height_width_ratio) {
         if (height / width > height_width_ratio) {
             this.context.canvas.height = width * height_width_ratio;

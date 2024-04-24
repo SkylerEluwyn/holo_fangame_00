@@ -1,8 +1,17 @@
 window.addEventListener("load", function (event) {
     "use strict";
     //// CONSTANTS ////
-    const ZONE_PREFIX = "01/zone";
-    const ZONE_SUFFIX = ".json";
+    // Utils
+    const OBJECTS_PREFIX = "02/objects/";
+    const OBJECTS_SUFFIX = ".js";
+
+    // Utils
+    const UTILS_PREFIX   = "02/utils/";
+    const UTILS_SUFFIX   = ".js";
+
+    // Zones
+    const ZONE_PREFIX    = "01/maps/";
+    const ZONE_SUFFIX    = ".json";
 
     /////////////////
     //// CLASSES ////
@@ -64,9 +73,9 @@ window.addEventListener("load", function (event) {
         if (controller.left.active)  { game.world.player.moveLeft(); };  // Left Movement
         if (controller.right.active) { game.world.player.moveRight(); }; // Right Movement
         if (controller.up.active) {
-            game.world.player.upAction();                                 // Face up if the Up key is held down
+            game.world.player.upAction();                                // Face up if the Up key is held down
         } else {
-            game.world.player.direction_y = 0;                            // Face forward if the Up key is not held down
+            game.world.player.direction_y = 0;                           // Face forward if the Up key is not held down
         };
         if (controller.down.active) {
             game.world.player.downAction();

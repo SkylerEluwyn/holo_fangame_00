@@ -223,35 +223,35 @@ Game.Player.prototype = {
             switch(this.direction_x + "," + this.direction_y) {
                 case "-1,-1":
                     this.shooting = true;
-                    // this.bullets.push(new Game.Projectile(this.x, this.y));
+                    // this.bullets.push(new Game.Bullet(this.x, this.y));
                     break;
                 case "-1,0":
                     this.shooting = true;
-                    // this.bullets.push(new Game.Projectile(this.x, (this.y + this.height) / 2));
+                    // this.bullets.push(new Game.Bullet(this.x, (this.y + this.height) / 2));
                     break;
                 case "-1,1":
                     this.shooting = true;
-                    // this.bullets.push(new Game.Projectile(this.x, this.y + this.height));
+                    // this.bullets.push(new Game.Bullet(this.x, this.y + this.height));
                 case "0,-1":
                     this.shooting = true;
-                    // this.bullets.push(new Game.Projectile((this.x + this.width) / 2, this.y));
+                    // this.bullets.push(new Game.Bullet((this.x + this.width) / 2, this.y));
                     break;
                 case "0,1":
                     if (this.jumping) {
                         this.shooting = true;
-                        // this.bullets.push(new Game.Projectile((this.x + this.width) / 2, this.y + this.height));
+                        // this.bullets.push(new Game.Bullet((this.x + this.width) / 2, this.y + this.height));
                     }
                     break;
                 case "1,-1":
                     this.shooting = true;
-                        // this.bullets.push(new Game.Projectile(this.x + this.width, this.y));
+                        // this.bullets.push(new Game.Bullet(this.x + this.width, this.y));
                 case "1,0":
                     this.shooting = true;
-                    // this.bullets.push(new Game.Projectile(this.x + this.width, (this.y + this.height) / 2));
+                    // this.bullets.push(new Game.Bullet(this.x + this.width, (this.y + this.height) / 2));
                     break;
                 case " 1,1":
                     this.shooting = true;
-                    // this.bullets.push(new Game.Projectile(this.x + this.width, this.y + this.height));
+                    // this.bullets.push(new Game.Bullet(this.x + this.width, this.y + this.height));
                     break;
             };
         };
@@ -314,38 +314,30 @@ Game.Player.prototype = {
 Object.assign(Game.Player.prototype, Game.MovingObject.prototype);
 Object.assign(Game.Player.prototype, Game.Animator.prototype);
 Game.Player.prototype.constructor = Game.Player;
-// Player end //
+// Player.end //
 
 // Bullet //
-// Game.Projectile = function (x, y) {
-//     Game.Object.call(this, x, y, dx, dy);
+Game.Bullet = function (x, y) {
+    Game.Object.call(this, x, y, dx, dy);
 
-//     this.lifespan    = 180;
+    this.lifespan    = 180;
 
-//     this.color = "#cfb737";
-//     this.direction_x = dx;
-//     this.direction_y = dy;
-//     this.velocity_x  = 0;
-//     this.velocity_y  = 0;
-// }
+    this.color = "#cfb737";
+    this.direction_x = dx;
+    this.direction_y = dy;
+    this.velocity_x  = 0;
+    this.velocity_y  = 0;
+}
 
-// Object.assign(Game.Projectile.prototype, Game.MovingObject.prototype);
-// Game.Projectile.prototype = {
-//     constructor: Game.Projectile,
+Object.assign(Game.Bullet.prototype, Game.MovingObject.prototype);
+Game.Bullet.prototype = {
+    constructor: Game.Bullet,
 
-//     updatePosition: function () {
-//         this.x = this.velocity_x;
-//         this.y = this.velocity_y;
-//     },
-
-//     expire: function () {
-//         if(this.lifespan < 1) {
-//             this.lifespan -= 1;
-//         } else {
-//             Game.Player.bullets.remove(this.lifespan = 0);
-//         }
-//     },
-// };
+    updatePosition: function () {
+        this.x = this.velocity_x;
+        this.y = this.velocity_y;
+    },
+};
 // Bullet end //
 
 // TileSet //
