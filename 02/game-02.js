@@ -215,17 +215,17 @@ Game.MovingObject.prototype.constructor = Game.MovingObject;
 // Moving Object end //
 
 // Heart Expansions //
-Game.AddHeart = function (exp_heart) {
-    Game.Object.call(this, exp_heart.x, exp_heart.y, 16, 16);
-    Game.Animator.call(this, Game.AddHeart.prototype.frame_sets["static-heart"], 0, "pause");
+Game.ExpHeart = function (x, y) {
+    Game.Object.call(this, x, y, 16, 16);
+    Game.Animator.call(this, Game.ExpHeart.prototype.frame_sets["static-heart"], 0, "pause");
 };
 
-Game.AddHeart.prototype = {
+Game.ExpHeart.prototype = {
     frame_sets: { "static_heart": [10] },
 };
-Object.assign(Game.AddHeart.prototype, Game.Animator.prototype);
-Object.assign(Game.AddHeart.prototype, Game.Object.prototype);
-Game.AddHeart.prototype.constructor = Game.AddHeart;
+Object.assign(Game.ExpHeart.prototype, Game.Animator.prototype);
+Object.assign(Game.ExpHeart.prototype, Game.Object.prototype);
+Game.ExpHeart.prototype.constructor = Game.ExpHeart;
 // Heart Expansions end //
 
 // Player //
@@ -470,7 +470,7 @@ Game.World.prototype = {
 
         for(let index = this.exp_hearts.length - 1; index > -1; -- index) {
             let exp_heart = zone.exp_hearts[index];
-            this.exp_hearts[index] = new Game.AddHeart(exp_heart);
+            this.exp_hearts[index] = new Game.ExpHeart(exp_heart);
         }
     },
 
