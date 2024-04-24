@@ -13,6 +13,7 @@
     <div id="menu">
         <p>menu</p>
         <div id="menu-list">
+            <br>
             <a href="my_game.html?01">01</a>
             <a href="my_game.html?02">02</a>
         </div>
@@ -36,7 +37,7 @@
                 part = "01";
         }
 
-        for (let index = 0; index < sources.length; index++) {
+        for (let index = 0; index < parts[part].length; index++) {
             let script = document.createElement("script");
             script.setAttribute("type", "text/javascript");
             script.setAttribute("src", parts[part][index]);
