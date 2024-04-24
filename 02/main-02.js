@@ -109,6 +109,33 @@ window.addEventListener("load", function (event) {
             console.log('Bang!');
         };
 
+        // Debugging purposes
+        switch(game.world.player.dx + "," + game.world.player.dy) {
+            case "-2,-1": 
+                console.log("Facing: Northwest");
+                break;
+            case "-1,-1": case "1,-1":
+                console.log("Facing: North");
+                break;
+            case "2,-1":
+                console.log("Facing: Northeast");
+                break;
+            case "-2,0": case "-1,0":
+                console.log("Facing: West");
+                break;
+            case "1,0": case "2,0":
+                console.log("Facing: South");
+                break;
+            case "-2,1":
+                console.log("Facing: Southwest");
+                break;
+            case "-1,1": case "1,1":
+                console.log("Facing: South");
+                break;
+            case "2,1":
+                console.log("Facing: Southeast");
+        }
+
         game.update();
     }
     /////////////////
