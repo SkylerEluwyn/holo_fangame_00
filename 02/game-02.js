@@ -189,8 +189,8 @@ Game.MovingObject = function(width, height, x, y, velocity_max) {
 
     this.jumping      = false;
     this.velocity_max = velocity_max;
-    this.vx   = 0;
-    this.vy   = 0;
+    this.vx    = 0;
+    this.vy           = 0;
     this.x_old        = x;
     this.y_old        = y;
 };
@@ -265,7 +265,7 @@ Game.Player.prototype = {
 
     shoot: function () {
         if (!this.shooting) {
-            switch(dx + "," + dy) {
+            switch(this.dx + "," + this.dy) {
                 case "-2,-1":             // Top-Left
                     this.shooting = true;
                     break;
