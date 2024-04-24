@@ -96,28 +96,28 @@ Game.Collider.prototype = {
     collidePlatformBottom: function (object, tile_bottom) {
         if (object.getTop() < tile_bottom && object.getOldTop() >= tile_bottom) {
             object.setTop(tile_bottom);
-            object.velocity_y = 0;
+            object.vy = 0;
             return true;
         } return false;
     },
     collidePlatformLeft: function (object, tile_left) {
         if (object.getRight() > tile_left && object.getOldRight() <= tile_left) {
             object.setRight(tile_left - 0.01);
-            object.velocity_x = 0;
+            object.vx = 0;
             return true;
         } return false;
     },
     collidePlatformRight: function (object, tile_right) {
         if (object.getLeft() < tile_right && object.getOldLeft() >= tile_right) {
             object.setLeft(tile_right);
-            object.velocity_x = 0;
+            object.vx = 0;
             return true;
         } return false;
     },
     collidePlatformTop: function (object, tile_top) {
         if (object.getBottom() > tile_top && object.getOldBottom() <= tile_top) {
             object.setBottom(tile_top - 0.01);
-            object.velocity_y = 0;
+            object.vy = 0;
             object.jumping = false;
             return true;
         } return false;
@@ -189,8 +189,8 @@ Game.MovingObject = function(width, height, x, y, velocity_max) {
 
     this.jumping      = false;
     this.velocity_max = velocity_max;
-    this.velocity_x   = 0;
-    this.velocity_y   = 0;
+    this.vx   = 0;
+    this.vy   = 0;
     this.x_old        = x;
     this.y_old        = y;
 };
@@ -221,7 +221,7 @@ Game.ExpHeart = function (x, y) {
 };
 
 Game.ExpHeart.prototype = {
-    frame_sets: { "static_heart": [10] },
+    frame_sets: { "static_heart": [10], },
 };
 Object.assign(Game.ExpHeart.prototype, Game.Animator.prototype);
 Object.assign(Game.ExpHeart.prototype, Game.Object.prototype);
@@ -232,13 +232,15 @@ Game.ExpHeart.prototype.constructor = Game.ExpHeart;
 Game.Player = function (x, y) {
     Game.Object.call(this, 100, 50, 16, 16);
     Game.Animator.call(this, Game.Player.prototype.frame_sets["idle-left"], 5);
-    this.jumping     =        true;           // Player's Jumping State
-    this.shooting    =       false;           // Player's Shooting State
+    this.jumping  =  true;           // Player's Jumping State
+    this.shooting = false;           // Player's Shooting State
 
-    this.direction_x =          -1;           // Player's X Direction
-    this.direction_y =           0;           // Player's Y Direction
-    this.velocity_x  =           0;           // Player's X Velocity
-    this.velocity_y  =           0;           // Player's Y Velocity
+    // this.projectiles = new Array();
+
+    this.dx       =    -1;           // Player's X Direction
+    this.dy       =     0;           // Player's Y Direction
+    this.vx       =     0;           // Player's X Velocity
+    this.vy       =     0;           // Player's Y Velocity
 };
 
 Game.Player.prototype = {
@@ -257,85 +259,62 @@ Game.Player.prototype = {
     jump: function () {
         if (!this.jumping) {
             this.jumping = true;
-            this.velocity_y -= 5;
+            this.vy -= 5;
         }
     },
 
     shoot: function () {
-        // if(!this.shooting) {
-        //     switch(this.direction_x + "," + this.direction_y) {
-        //         case "-1,-1":
-        //             this.shooting = true;
-        //             // this.bullets.push(new Game.Bullet(this.x, this.y));
-        //             break;
-        //         case "-1,0":
-        //             this.shooting = true;
-        //             // this.bullets.push(new Game.Bullet(this.x, (this.y + this.height) / 2));
-        //             break;
-        //         case "-1,1":
-        //             this.shooting = true;
-        //             // this.bullets.push(new Game.Bullet(this.x, this.y + this.height));
-        //         case "0,-1":
-        //             this.shooting = true;
-        //             // this.bullets.push(new Game.Bullet((this.x + this.width) / 2, this.y));
-        //             break;
-        //         case "0,1":
-        //             if (this.jumping) {
-        //                 this.shooting = true;
-        //                 // this.bullets.push(new Game.Bullet((this.x + this.width) / 2, this.y + this.height));
-        //             }
-        //             break;
-        //         case "1,-1":
-        //             this.shooting = true;
-        //                 // this.bullets.push(new Game.Bullet(this.x + this.width, this.y));
-        //         case "1,0":
-        //             this.shooting = true;
-        //             // this.bullets.push(new Game.Bullet(this.x + this.width, (this.y + this.height) / 2));
-        //             break;
-        //         case " 1,1":
-        //             this.shooting = true;
-        //             // this.bullets.push(new Game.Bullet(this.x + this.width, this.y + this.height));
-        //             break;
-        //     };
-        // };
+        if (!this.shooting) {
+            switch(dx + "," + dy) {
+                case "-2, 0": case "-1, 0":
+                    this.shooting = true;
+                break;
+                case "1,0"  : case "2,0":
+                    this.shooting = true;
+                    // 
+                    break;
+                case "-2,-1":
+                    break;
+            };
+        };
     },
 
     upAction: function () {
-        this.direction_y  =   -1;
+        this.dy  =    -1;
     },
 
     moveLeft: function () {
-        this.direction_x  =   -1;
-        this.velocity_x  -=  0.3;
+        this.dx  =    -1;
+        this.vx  -=  0.3;
     },
     moveRight: function (frame_set) {
-        this.direction_x  =    1;
-        this.velocity_x  +=  0.3;
+        this.dx  =     1;
+        this.vx  +=  0.3;
     },
 
     downAction: function() {
-        this.direction_y  =    1;
+        this.dy  =     1;
     },
 
     updateAnimation: function () {
-        if (this.velocity_y < 0) {
+        if (this.vy < 0) {
         
-            if (this.direction_x < 0) this.changeFrameSet(this.frame_sets["jump-left"], "pause");
+            if (this.dx < 0) this.changeFrameSet(this.frame_sets["jump-left"], "pause");
             else this.changeFrameSet(this.frame_sets["jump-right"], "pause");
         
-        } else if (this.velocity_y > 0) {
+        } else if (this.vy > 0) {
 
-            if (this.direction_x < 0) this.changeFrameSet(this.frame_sets["fall-left"], "pause");
+            if (this.dx < 0) this.changeFrameSet(this.frame_sets["fall-left"], "pause");
             else this.changeFrameSet(this.frame_sets["fall-right"], "pause");
 
-        } else if (this.direction_x < 0) {
+        } else if (this.dx < 0) {
         
-            if (this.velocity_x < -0.1) this.changeFrameSet(this.frame_sets["move-left"], "loop", 10);
+            if (this.vx < -0.1) this.changeFrameSet(this.frame_sets["move-left"], "loop", 10);
             else this.changeFrameSet(this.frame_sets["idle-left"], "pause");
         
-        } else if (this.direction_x > 0) {
+        } else if (this.dx > 0) {
 
-            if (this.velocity_x > 0.1) this.changeFrameSet(this.frame_sets["move-right"], "loop", 12);
+            if (this.vx > 0.1) this.changeFrameSet(this.frame_sets["move-right"], "loop", 12);
             else this.changeFrameSet(this.frame_sets["idle-right"], "pause");
         
         }
@@ -346,42 +325,18 @@ Game.Player.prototype = {
         this.x_old = this.x;
         this.y_old = this.y;
 
-        this.velocity_x *= friction;
-        this.velocity_y += gravity;
+        this.vx *= friction;
+        this.vy += gravity;
 
-        this.x    += this.velocity_x;
-        this.y    += this.velocity_y;
+        this.x    += this.vx;
+        this.y    += this.vy;
     },
 };
 
 Object.assign(Game.Player.prototype, Game.MovingObject.prototype);
 Object.assign(Game.Player.prototype, Game.Animator.prototype);
 Game.Player.prototype.constructor = Game.Player;
-// Player.end //
-
-// Bullet //
-// Game.Bullet = function (x, y) {
-//     Game.Object.call(this, x, y, dx, dy);
-
-//     this.lifespan    = 180;
-
-//     this.color = "#cfb737";
-//     this.direction_x = dx;
-//     this.direction_y = dy;
-//     this.velocity_x  = 0;
-//     this.velocity_y  = 0;
-// }
-
-// Object.assign(Game.Bullet.prototype, Game.MovingObject.prototype);
-// Game.Bullet.prototype = {
-//     constructor: Game.Bullet,
-
-//     updatePosition: function () {
-//         this.x = this.velocity_x;
-//         this.y = this.velocity_y;
-//     },
-// };
-// Bullet end //
+// Player end //
 
 // TileSet //
 Game.TileSet = function (columns, tile_size) {
@@ -468,7 +423,7 @@ Game.World.prototype = {
         this.rows          = zone.rows;
         this.zone_id       = zone.zone_id;
 
-        for(let index = this.exp_hearts.length - 1; index > -1; -- index) {
+        for(let index = zone.exp_hearts.length - 1; index > -1; -- index) {
             let exp_heart = zone.exp_hearts[index];
             this.exp_hearts[index] = new Game.ExpHeart(exp_heart);
         }
