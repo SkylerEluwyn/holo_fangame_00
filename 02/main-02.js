@@ -10,7 +10,7 @@ window.addEventListener("load", function (event) {
     const UTILS_SUFFIX   = ".js";
 
     // Zones
-    const ZONE_PREFIX    = "01/maps/zone";
+    const ZONE_PREFIX    = "02/maps/zone";
     const ZONE_SUFFIX    = ".json";
 
     /////////////////
