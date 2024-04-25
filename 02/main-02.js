@@ -124,7 +124,7 @@ window.addEventListener("load", function (event) {
                 console.log("Facing: West");
                 break;
             case "1,0": case "2,0":
-                console.log("Facing: South");
+                console.log("Facing: East");
                 break;
             case "-2,1":
                 console.log("Facing: Southwest");
