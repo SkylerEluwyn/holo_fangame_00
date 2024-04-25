@@ -81,7 +81,49 @@ window.addEventListener("load", function (event) {
         
         display.drawObject(assets_manager.tile_set_image, frame.x, frame.y, game.world.player.x + Math.floor(game.world.player.width * 0.5 - frame.width * 0.5) + frame.offset_x, game.world.player.y+ frame.offset_y, frame.width, frame.height);
         
-        p.innerHTML = "Hearts Collected: " + game.world.heart_count;
+        
+        var facing = undefined;
+        // Debugging purposes
+        switch(game.world.player.dx + "," + game.world.player.dy) {
+            case "-2,-1": 
+                facing = "NW";
+                break;
+            case "-1,-1":
+                facing = "N";
+                break;
+            case "1,-1":
+                facing = "N";
+                break;
+            case "2,-1":
+                facing = "NE";
+                break;
+            case "-2,0":
+                facing = "W";
+                break;
+            case "-1,0":
+                facing = "W";
+                break;
+            case "1,0":
+                facing = "E";
+                break;
+            case "2,0":
+                facing = "E";
+                break;
+            case "-2,1":
+                facing = "SW";
+                break;
+            case "-1,1":
+                facing = "S";
+                break;
+            case "1,1":
+                facing = "S";
+                break;
+            case "2,1":
+                facing = "SE";
+                break;
+        };
+
+        p.innerHTML = "Hearts Collected: " + game.world.heart_count + "<br>Facing: " + facing;
         display.render();
     }
 
@@ -91,7 +133,6 @@ window.addEventListener("load", function (event) {
 
         if (controller.up.active) {
             game.world.player.upAction();                                 // Face up if the Up key is held down
-            console.log(game.world.player.dy);
         } else {
             game.world.player.dy = 0;                            // Face forward if the Up key is not held down
         };
@@ -114,44 +155,11 @@ window.addEventListener("load", function (event) {
             controller.shoot.active = false;
         };
 
-        // Debugging purposes
-        switch(game.world.player.dx + "," + game.world.player.dy) {
-            case "-2,-1": 
-                console.log("Direction: Left, Facing: Northwest, Moving: Yes");
-                break;
-            case "-1,-1":
-                console.log("Direction: Left, Facing: North, Moving: No");
-            case "1,-1":
-                console.log("Direction: Right, Facing: North, Moving: No");
-                break;
-            case "2,-1":
-                console.log("Direction: Right, Facing: Northeast, Moving: Yes");
-                break;
-            case "-2,0":
-                console.log("Direction: Left, Facing: West, Moving: Yes");
-                break;
-            case "-1,0":
-                console.log("Direction: Left, Facing: West, Moving: Mo");
-                break;
-            case "1,0":
-                console.log("Direction: Right, Facing: East, Moving: No");
-                break;
-            case "2,0":
-                console.log("Direction: Right, Facing: East, Moving: Yes");
-                break;
-            case "-2,1":
-                console.log("Direction: Right, Facing: Southwest, Moving: Yes");
-                break;
-            case "-1,1":
-                console.log("Direction: Left,  Facing: South, Moving: No");
-                break;
-            case "1,1":
-                console.log("Direction: Right, Facing: South, Moving: No");
-                break;
-            case "2,1":
-                console.log("Direction: Right, Facing: Southeast, Moving: Yes");
-                break;
-        }
+        // Miscellaneous
+        // if (controller.hold.active) {
+        //     let dx = game.world.player.dx;
+        //     let dy = game.world.player.dy;
+        // };
 
         game.update();
     }
@@ -165,8 +173,10 @@ window.addEventListener("load", function (event) {
     var engine         = new Engine(1000 / 60, render, update);
 
     var p              = document.createElement("p");
-    p.setAttribute("style", "color:#c07000; font-size:2.0em; position:fixed;");
-    p.innerHTML = "Heart Expansions left: 0";
+    p.setAttribute("style", "color:#c07000; font-size:1.0em; position:fixed;");
+    p.innerHTML = `
+        Hearts Collected: 0
+        <br>Facing: n/a`;
     document.body.appendChild(p);
     ////////////////////
     //// INITIALIZE ////
@@ -179,7 +189,7 @@ window.addEventListener("load", function (event) {
        game.world.setup(zone);
        
        assets_manager.requestImage("sprites-01.png", (image) => {
-        assets_manager.tile_set_image = image;
+            assets_manager.tile_set_image = image;
 
         resize();
         engine.start(); 
