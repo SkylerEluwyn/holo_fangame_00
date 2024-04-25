@@ -84,41 +84,29 @@ window.addEventListener("load", function (event) {
         
         var facing = undefined;
         // Debugging purposes
-        switch(game.world.player.dx + "," + game.world.player.dy) {
-            case "-2,-1": 
+        switch(game.world.player.dx, game.world.player.dy) {
+            case -2,-1: 
                 facing = "NW";
                 break;
-            case "-1,-1":
+            case -1,-1: case 1,-1:
                 facing = "N";
                 break;
-            case "1,-1":
-                facing = "N";
-                break;
-            case "2,-1":
+            case 2,-1:
                 facing = "NE";
                 break;
-            case "-2,0":
+            case -2,0:  case -1,0:
                 facing = "W";
                 break;
-            case "-1,0":
-                facing = "W";
-                break;
-            case "1,0":
+            case  1,0:   case 2,0:
                 facing = "E";
                 break;
-            case "2,0":
-                facing = "E";
-                break;
-            case "-2,1":
+            case -2,1:
                 facing = "SW";
                 break;
-            case "-1,1":
+            case -1,1:   case 1,1:
                 facing = "S";
                 break;
-            case "1,1":
-                facing = "S";
-                break;
-            case "2,1":
+            case 2,1:
                 facing = "SE";
                 break;
         };
@@ -129,21 +117,19 @@ window.addEventListener("load", function (event) {
 
     var update = function () {
         // Basic Movements
-        if (controller.left.active)  { game.world.player.moveLeft();  };  // Left Movement
+        if (controller.left.active)   { game.world.player.moveLeft();  };
+        if (controller.right.active)  { game.world.player.moveRight(); };
 
-        if (controller.up.active) {
-            game.world.player.upAction();                                 // Face up if the Up key is held down
-        } else {
-            game.world.player.dy = 0;                            // Face forward if the Up key is not held down
-        };
-        
-        if (controller.right.active) { game.world.player.moveRight(); };  // Right Movement
+        if (controller.jump.active)   { game.world.player.jump(); controller.jump.active = false; }
 
-        if (controller.down.active) {
-            game.world.player.downAction();
-        } else {
-            game.world.player.dy = 0;                
-            if (controller.jump.active)  { game.world.player.jump(); controller.jump.active = false; };
+        // Handle Aiming
+        if (controller.up.active)     { game.world.player.upAction();   };
+        if (controller.down.active)   { game.world.player.downAction(); };
+
+        if (!controller.left.active  && game.world.player.dx < 0) { game.world.player.dx = -1 };
+        if (!controller.right.active && game.world.player.dx > 0) { game.world.player.dx =  1 };
+        if (!controller.up.active && !controller.down.active) {
+            game.world.player.dy= 0;
         };
         
         // Combat
