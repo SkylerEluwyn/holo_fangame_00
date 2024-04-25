@@ -299,7 +299,7 @@ Game.Player.prototype = {
     },
 
     upAction: function () {
-        this.dy    = 1;
+        this.dy   = -1;
     },
 
     moveLeft: function () {
