@@ -173,7 +173,7 @@ window.addEventListener("load", function (event) {
     var engine         = new Engine(1000 / 60, render, update);
 
     var p              = document.createElement("p");
-    p.setAttribute("style", "color:#c07000; font-size:1.0em; position:fixed;");
+    p.setAttribute("style", "color:#c07000; font-size:3.0em; position:fixed;");
     p.innerHTML = `
         Hearts Collected: 0
         <br>Facing: n/a`;

@@ -265,6 +265,23 @@ Game.Player.prototype = {
         }
     },
 
+    upAction: function () {
+        this.dy   = -1;
+    },
+
+    moveLeft: function () {
+        this.vx -= 0.3;
+        this.dx  =  -2;
+    },
+    moveRight: function (frame_set) {
+        this.vx += 0.3;
+        this.dx  =   2;
+    },
+
+    downAction: function() {
+        this.dy    = 1;
+    },
+
     shoot: function () {
         if (!this.shooting) {
             switch(this.dx + "," + this.dy) {
@@ -297,24 +314,7 @@ Game.Player.prototype = {
             };
         };
     },
-
-    upAction: function () {
-        this.dy   = -1;
-    },
-
-    moveLeft: function () {
-        this.vx -= 0.3;
-        this.dx  =  -2;
-    },
-    moveRight: function (frame_set) {
-        this.vx += 0.3;
-        this.dx  =   2;
-    },
-
-    downAction: function() {
-        this.dy    = 1;
-    },
-
+    
     updateAnimation: function () {
         if (this.vy < 0) {
         
