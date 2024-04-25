@@ -123,7 +123,7 @@ window.addEventListener("load", function (event) {
                 break;
         };
 
-        p.innerHTML = "Hearts Collected: " + game.world.heart_count + "<br>Facing: " + facing;
+        p.innerHTML = "Hearts Collected: " + game.world.heart_count + "<br>Facing: " + facing + "(" + game.world.player.dx + ", " + game.world.player.dy + ")";
         display.render();
     }
 
