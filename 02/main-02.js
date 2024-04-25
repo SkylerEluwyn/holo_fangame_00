@@ -91,6 +91,7 @@ window.addEventListener("load", function (event) {
         if (controller.right.active) { game.world.player.moveRight(); };  // Right Movement
         if (controller.up.active) {
             game.world.player.upAction();                                 // Face up if the Up key is held down
+            console.log("Up control functional");
         } else {
             game.world.player.dy = 0;                            // Face forward if the Up key is not held down
         };
