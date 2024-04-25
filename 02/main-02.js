@@ -84,29 +84,29 @@ window.addEventListener("load", function (event) {
         
         var facing = undefined;
         // Debugging purposes
-        switch(game.world.player.dx, game.world.player.dy) {
-            case -2,-1: 
+        switch(game.world.player.dx + ", " + game.world.player.dy) {
+            case "-2, -1": 
                 facing = "NW";
                 break;
-            case -1,-1: case 1,-1:
+            case "-1, -1": case "1, -1":
                 facing = "N";
                 break;
-            case 2,-1:
+            case "2, -1":
                 facing = "NE";
                 break;
-            case -2,0:  case -1,0:
+            case "-2, 0":  case "-1, 0":
                 facing = "W";
                 break;
-            case  1,0:   case 2,0:
+            case  "1, 0":   case "2, 0":
                 facing = "E";
                 break;
-            case -2,1:
+            case "-2, 1":
                 facing = "SW";
                 break;
-            case -1,1:   case 1,1:
+            case "-1, 1":   case "1, 1":
                 facing = "S";
                 break;
-            case 2,1:
+            case "2, 1":
                 facing = "SE";
                 break;
         };
@@ -132,11 +132,10 @@ window.addEventListener("load", function (event) {
         
         // Combat
         if (controller.shoot.active) {
-            game.world.player.shoot();
-            if (game.world.player.shooting) {
-                console.log('Bang!');
-            };
-            controller.shoot.active = false;
+            controller.shoot.active    = false;
+
+            game.world.player.shoot(); console.log('Bang!');
+            game.world.player.shooting = false;
         };
 
         // Miscellaneous

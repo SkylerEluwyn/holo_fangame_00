@@ -284,31 +284,29 @@ Game.Player.prototype = {
 
     shoot: function () {
         if (!this.shooting) {
-            switch(this.dx, this.dy) {
-                case -2,-1:             // Top-Left
+            switch(this.dx + ", " + this.dy) {
+                case "-2, -1":             // Top-Left
                     this.shooting = true;
                     break;
-                case -1,-1: case  1,-1: // Top-Center
+                case "-1, -1": case  1,-1: // Top-Center
                     this.shooting = true;
                     break;
-                case  2,-1:             // Top-Right
+                case "2, -1" :             // Top-Right
                     this.shooting = true;
                     break;
-                case -2,0: case -1,0: // Middle-Left
-                    this.shooting = true;
-                break;
-                case 1,0 : case  2,0: // Middle-Right
+                case "-2, 0" : case "-1,0": // Middle-Left
                     this.shooting = true;
                     break;
-                case -2,1:              // Bottom-Left
+                case "1, 0"  : case  "2,0": // Middle-Right
                     this.shooting = true;
                     break;
-                case -1,1: case  1,1: // Bottom-Center
-                    if (this.jumping) {
-                        this.shooting = true;
-                    };
+                case "-2, 1" :              // Bottom-Left
+                    this.shooting = true;
                     break;
-                case  2,1:              // Bottom-Right
+                case "-1, 1" : case  "1, 1": // Bottom-Center
+                    this.shooting = true;
+                    break;
+                case "2, 1"  :              // Bottom-Right
                     this.shooting = true;
                     break;
             };
