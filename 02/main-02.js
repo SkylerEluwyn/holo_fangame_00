@@ -105,35 +105,49 @@ window.addEventListener("load", function (event) {
         // Combat
         if (controller.shoot.active) {
             game.world.player.shoot();
+            if (game.world.player.shooting) {
+                console.log('Bang!');
+            };
             controller.shoot.active = false;
-            console.log('Bang!');
         };
 
         // Debugging purposes
         switch(game.world.player.dx + "," + game.world.player.dy) {
             case "-2,-1": 
-                console.log("Facing: Northwest");
+                console.log("Direction: Left, Facing: Northwest, Moving: Yes");
                 break;
-            case "-1,-1": case "1,-1":
-                console.log("Facing: North");
+            case "-1,-1":
+                console.log("Direction: Left, Facing: North, Moving: No");
+            case "1,-1":
+                console.log("Direction: Right, Facing: North, Moving: No");
                 break;
             case "2,-1":
-                console.log("Facing: Northeast");
+                console.log("Direction: Right, Facing: Northeast, Moving: Yes");
                 break;
-            case "-2,0": case "-1,0":
-                console.log("Facing: West");
+            case "-2,0":
+                console.log("Direction: Left, Facing: West, Moving: Yes");
                 break;
-            case "1,0": case "2,0":
-                console.log("Facing: East");
+            case "-1,0":
+                console.log("Direction: Left, Facing: West, Moving: Mo");
+                break;
+            case "1,0":
+                console.log("Direction: Right, Facing: East, Moving: No");
+                break;
+            case "2,0":
+                console.log("Direction: Right, Facing: East, Moving: Yes");
                 break;
             case "-2,1":
-                console.log("Facing: Southwest");
+                console.log("Direction: Right, Facing: Southwest, Moving: Yes");
                 break;
-            case "-1,1": case "1,1":
-                console.log("Facing: South");
+            case "-1,1":
+                console.log("Direction: Left,  Facing: South, Moving: No");
+                break;
+            case "1,1":
+                console.log("Direction: Right, Facing: South, Moving: No");
                 break;
             case "2,1":
-                console.log("Facing: Southeast");
+                console.log("Direction: Right, Facing: Southeast, Moving: Yes");
+                break;
         }
 
         game.update();
