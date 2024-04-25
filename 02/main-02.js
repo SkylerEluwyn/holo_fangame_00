@@ -128,9 +128,7 @@ window.addEventListener("load", function (event) {
 
         if (!controller.left.active  && game.world.player.dx < 0) { game.world.player.dx = -1 };
         if (!controller.right.active && game.world.player.dx > 0) { game.world.player.dx =  1 };
-        if (!controller.up.active && !controller.down.active) {
-            game.world.player.dy= 0;
-        };
+        if (!controller.up.active    && !controller.down.active)  { game.world.player.dy = 0; };
         
         // Combat
         if (controller.shoot.active) {
