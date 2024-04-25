@@ -289,7 +289,7 @@ Game.Player.prototype = {
                 case "-1,1": case  "1,1": // Bottom-Center
                     if (this.jumping) {
                         this.shooting = true;
-                    }
+                    };
                     break;
                 case  "2,1":              // Bottom-Right
                     this.shooting = true;

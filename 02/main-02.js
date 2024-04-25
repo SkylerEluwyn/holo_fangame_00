@@ -88,17 +88,20 @@ window.addEventListener("load", function (event) {
     var update = function () {
         // Basic Movements
         if (controller.left.active)  { game.world.player.moveLeft();  };  // Left Movement
-        if (controller.right.active) { game.world.player.moveRight(); };  // Right Movement
+
         if (controller.up.active) {
             game.world.player.upAction();                                 // Face up if the Up key is held down
+            console.log(game.world.player.dy);
         } else {
             game.world.player.dy = 0;                            // Face forward if the Up key is not held down
         };
+        
+        if (controller.right.active) { game.world.player.moveRight(); };  // Right Movement
+
         if (controller.down.active) {
             game.world.player.downAction();
         } else {
-            game.world.player.dy = 0;
-                
+            game.world.player.dy = 0;                
             if (controller.jump.active)  { game.world.player.jump(); controller.jump.active = false; };
         };
         
