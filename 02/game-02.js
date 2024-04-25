@@ -299,20 +299,20 @@ Game.Player.prototype = {
     },
 
     upAction: function () {
-        this.dy  =    -1;
+        this.dy    = 1;
     },
 
     moveLeft: function () {
-        this.vx  -=                      0.3;
-        this.dx   =  (this.vx < 1) ? -2 : -1;
+        this.vx -= 0.3;
+        this.dx  =  -2;
     },
     moveRight: function (frame_set) {
-        this.vx  +=                      0.3;
-        this.dx   =  (this.vx > 1) ?   2 : 1;
+        this.vx += 0.3;
+        this.dx  =   2;
     },
 
     downAction: function() {
-        this.dy  =     1;
+        this.dy    = 1;
     },
 
     updateAnimation: function () {
@@ -349,6 +349,13 @@ Game.Player.prototype = {
 
         this.x    += this.vx;
         this.y    += this.vy;
+
+        if (this.vx < 0) {
+            this.dx = -1;
+
+        } else if (this.vx > 0) {
+            this.dx = 1;
+        }
     },
 };
 
@@ -444,7 +451,7 @@ Game.World.prototype = {
 
         for(let index = zone.exp_hearts.length - 1; index > -1; -- index) {
             let exp_heart = zone.exp_hearts[index];
-            this.exp_hearts[index] = new Game.ExpHeart(exp_heart);
+            this.exp_hearts[index] = new Game.ExpHeart(exp_heart[0] * this.tile_set.tile_size, exp_heart[1] * this.tile_set.tile_size);
         }
     },
 
